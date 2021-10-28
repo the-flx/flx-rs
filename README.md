@@ -11,3 +11,9 @@ Add this to your `Cargo.toml`:
 [dependencies]
 flx_rs = "0.1.0"
 ```
+
+## License
+
+flx-rs is distributed under the terms of the MIT license.
+
+See [LICENSE](./LICENSE) for details.
