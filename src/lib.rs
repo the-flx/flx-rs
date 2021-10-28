@@ -8,4 +8,4 @@
  */
 mod search;
 
-pub use search::{score};
+pub use search::{score, get_heatmap_str};

@@ -78,7 +78,7 @@ fn get_hash_for_string(result: &mut HashMap<Option<u8>, Option<i32>>, str: &str)
     }
 }
 
-fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option<char>) {
+pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option<char>) {
     let str_len: usize = str.len();
     let str_last_index: usize = str_len - 1;
     scores.clear();
