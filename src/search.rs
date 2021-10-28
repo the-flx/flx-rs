@@ -201,13 +201,30 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
     }
 }
 
+fn bigger_sublist(sorted_list: Vec<i32>, val: Option<i32>) {
+
+}
+
 pub fn find_best_match(imatch: &mut Vec<i32>,
                        str_info: HashMap<Option<u8>, Option<i32>>, heatmap: Vec<i32>,
                        greater_than: Option<i32>,
                        query: &str, query_length: i32,
-                       q_index: i32) {
+                       q_index: i32,
+                       match_cache: &mut HashMap<i32, String>) {
     let greater_num: i32 = if greater_than != None { greater_than.unwrap() } else { 0 };
     let hash_key: i32 = q_index + (greater_num * query_length);
+    let mut hash_value: Option<&String> = match_cache.get(&hash_key);
+
+    if hash_value != None {
+        if hash_value == "no-match" {
+            // nil
+        } else {
+            // hash_value
+        }
+    } else {
+        let sorted_list;
+        let indexes: Vec<i32> = bigger_sublist(sorted_list, greater_than);
+    }
 }
 
 pub fn score(str: &str, query: &str) -> Option<f32> {
@@ -220,10 +237,11 @@ pub fn score(str: &str, query: &str) -> Option<f32> {
     let mut heatmap: Vec<i32> = Vec::new();
     get_heatmap_str(&mut heatmap, str, None);
 
-    let query_length: usize = query.len();
+    let query_length: i32 = query.len() as i32;
     let full_match_boost: bool = (1 < query_length) && (query_length < 5);
+    let mut match_cache: HashMap<i32, String> = HashMap::new();
     let mut optimal_match: Vec<i32> = Vec::new();
-    find_best_match(&mut optimal_match, str_info, heatmap, None, query, query_length, 0);
+    find_best_match(&mut optimal_match, str_info, heatmap, None, query, query_length, 0, &mut match_cache);
 
     if full_match_boost {
 
