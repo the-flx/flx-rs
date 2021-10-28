@@ -201,12 +201,13 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
     }
 }
 
-fn find_best_match(imatch: &mut Vec<i32>,
-                   str_info: HashMap<Option<u8>, Option<i32>>, heatmap: Vec<i32>,
-                   greater_than: bool,
-                   query: &str, query_length: usize,
-                   q_index: usize) {
-
+pub fn find_best_match(imatch: &mut Vec<i32>,
+                       str_info: HashMap<Option<u8>, Option<i32>>, heatmap: Vec<i32>,
+                       greater_than: Option<i32>,
+                       query: &str, query_length: i32,
+                       q_index: i32) {
+    let greater_num: i32 = if greater_than != None { greater_than.unwrap() } else { 0 };
+    let hash_key: i32 = q_index + (greater_num * query_length);
 }
 
 pub fn score(str: &str, query: &str) -> Option<f32> {
@@ -222,7 +223,7 @@ pub fn score(str: &str, query: &str) -> Option<f32> {
     let query_length: usize = query.len();
     let full_match_boost: bool = (1 < query_length) && (query_length < 5);
     let mut optimal_match: Vec<i32> = Vec::new();
-    find_best_match(&mut optimal_match, str_info, heatmap, false, query, query_length, 0);
+    find_best_match(&mut optimal_match, str_info, heatmap, None, query, query_length, 0);
 
     if full_match_boost {
 
