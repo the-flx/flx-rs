@@ -9,5 +9,5 @@
 mod search;
 
 pub use search::{
-    get_heatmap_str, find_best_match, score
+    get_heatmap_str, find_best_match, score, Score
 };
