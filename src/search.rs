@@ -212,17 +212,21 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
 }
 
 fn bigger_sublist(result: &mut VecDeque<Option<u8>>,
-                  sorted_list: &VecDeque<Option<u8>>,
+                  sorted_list: Option<&VecDeque<Option<u8>>>,
                   val: Option<u8>) {
+    if sorted_list == None {
+        return;
+    }
+    let _sorted_list: &VecDeque<Option<u8>> = sorted_list.unwrap();
     if val != None {
         let _val: u8 = val.unwrap();
-        for sub in sorted_list {
+        for sub in _sorted_list {
             if sub.unwrap() > _val {
                 result.push_back(Some(sub.unwrap()));
             }
         }
     } else {
-        for sub in sorted_list {
+        for sub in _sorted_list {
             result.push_back(Some(sub.unwrap()));
         }
     }
@@ -259,7 +263,7 @@ pub fn find_best_match(imatch: &mut Vec<Score>,
         }
     } else {
         let uchar: Option<u8> = Some(query.chars().nth(q_index as usize).unwrap() as u8);
-        let sorted_list: &VecDeque<Option<u8>> = str_info.get(&uchar).unwrap();
+        let sorted_list: Option<&VecDeque<Option<u8>>> = str_info.get(&uchar);
         let mut indexes: VecDeque<Option<u8>> = VecDeque::new();
         bigger_sublist(&mut indexes, sorted_list, greater_than);
         let mut temp_score: i32;
