@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
 
+## 0.1.3
+> Released Nov 9, 2021
+
+* Use `u32` instead of `u8` to widen supported characters.
+
 ## 0.1.2
 > Released Nov 8, 2021
 
