@@ -6,6 +6,8 @@
 # flx-rs
 > Rewrite emacs-flx in Rust for dynamic modules
 
+[![CI](https://github.com/jcs090218/flx-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/jcs090218/flx-rs/actions/workflows/ci.yml)
+
 ## 🔨 Usage
 
 Add this to your `Cargo.toml`:
