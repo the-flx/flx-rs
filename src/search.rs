@@ -93,6 +93,7 @@ fn process_cache(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>,
                  str: &str,
                  cache: Option<HashMap<&str, HashMap<Option<u32>, VecDeque<Option<u32>>>>>) {
     if cache.is_none() {
+        get_hash_for_string(result, str);
         return;
     }
 
