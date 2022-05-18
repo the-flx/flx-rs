@@ -89,6 +89,26 @@ fn get_hash_for_string(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>,
     }
 }
 
+fn process_cache(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>,
+                 str: &str,
+                 cache: Option<HashMap<&str, HashMap<Option<u32>, VecDeque<Option<u32>>>>>) {
+    if cache.is_none() {
+        return;
+    }
+
+    let mut _cache: HashMap<&str, HashMap<Option<u32>, VecDeque<Option<u32>>>> = cache.unwrap();
+
+    if _cache.contains_key(str) {
+        let data: HashMap<Option<u32>, VecDeque<Option<u32>>> = _cache.get(str).unwrap().clone();
+        for (key, value) in data {
+            result.insert(key, value);
+        }
+    } else {
+        get_hash_for_string(result, str);
+        _cache.insert(str, result.clone());
+    }
+}
+
 pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option<char>) {
     let str_len: usize = str.len();
     let str_last_index: usize = str_len - 1;
@@ -325,12 +345,14 @@ pub fn find_best_match(imatch: &mut Vec<Score>,
     }
 }
 
-pub fn score(str: &str, query: &str) -> Option<Score> {
+pub fn score(str: &str, query: &str,
+             cache: Option<HashMap<&str, HashMap<Option<u32>, VecDeque<Option<u32>>>>>)
+             -> Option<Score> {
     if str.is_empty() || query.is_empty() {
         return None;
     }
     let mut str_info: HashMap<Option<u32>, VecDeque<Option<u32>>> = HashMap::new();
-    get_hash_for_string(&mut str_info, str);
+    process_cache(&mut str_info, str, cache);
 
     let mut heatmap: Vec<i32> = Vec::new();
     get_heatmap_str(&mut heatmap, str, None);
