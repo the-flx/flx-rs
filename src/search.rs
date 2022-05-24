@@ -16,34 +16,30 @@ pub const WORD_SEPARATORS: [u32; 7] = [
     '_' as u32,
     ':' as u32,
     '.' as u32,
-    '.' as u32,
+    '/' as u32,
     '\\' as u32,
 ];
 
 const DEFAULT_SCORE: i32 = -35;
 
 fn word(char: Option<u32>) -> bool {
-    if char == None {
+    if char.is_none() {
         return false;
     }
-    for c in WORD_SEPARATORS.iter() {
-        if *c == char.unwrap() {
-            return false;
-        }
-    }
-    return true
+    let _char: u32 = char.unwrap();
+    return !WORD_SEPARATORS.contains(&_char)
 }
 
 fn capital(char: Option<u32>) -> bool {
-    let valid: Option<char> = char::from_u32(char.unwrap());
-    if valid == None {
+    if char.is_none() {
         return false;
     }
-    return word(char) && valid.unwrap().is_uppercase()
+    let _char: Option<char> = char::from_u32(char.unwrap());
+    return word(char) && _char.unwrap().is_uppercase()
 }
 
 fn boundary(last_char: Option<u32>, char: Option<u32>) -> bool {
-    if last_char == None {
+    if last_char.is_none() {
         return true;
     }
     if !capital(last_char) && capital(char) {
