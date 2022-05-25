@@ -22,8 +22,6 @@ pub const WORD_SEPARATORS: [u32; 7] = [
 
 const DEFAULT_SCORE: i32 = -35;
 
-static mut STRING_CACHE: Option<HashMap<&str, StrInfo>> = None;
-
 #[derive(Clone)]
 pub struct StrInfo {
     // Generated through get_hash_for_string
@@ -105,28 +103,23 @@ fn get_hash_for_string(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>,
     }
 }
 
-fn process_cache(str_info: &mut StrInfo, str: &str, cache: Option<&str>) {
+fn process_cache(str_info: &mut StrInfo, str: &str, cache: Option<HashMap<&str, StrInfo>>) {
     if cache.is_none() {
         get_hash_for_string(&mut str_info.hash_for_string, str);
         get_heatmap_str(&mut str_info.heatmap, str, None);
         return;
     }
 
-    unsafe {
-        if STRING_CACHE.is_none() {
-            STRING_CACHE = Some(HashMap::new());
-        }
-        let mut _cache: HashMap<&str, StrInfo> = STRING_CACHE.unwrap();
+    let mut _cache: HashMap<&str, StrInfo> = cache.unwrap();
 
-        if _cache.contains_key(str) {
-            let data: StrInfo = _cache.get(str).unwrap().clone();
-            str_info.hash_for_string = data.hash_for_string;
-            str_info.heatmap = data.heatmap;
-        } else {
-            get_hash_for_string(&mut str_info.hash_for_string, str);
-            get_heatmap_str(&mut str_info.heatmap, str, None);
-            _cache.insert(str, str_info.clone());
-        }
+    if _cache.contains_key(str) {
+        let data: StrInfo = _cache.get(str).unwrap().clone();
+        str_info.hash_for_string = data.hash_for_string;
+        str_info.heatmap = data.heatmap;
+    } else {
+        get_hash_for_string(&mut str_info.hash_for_string, str);
+        get_heatmap_str(&mut str_info.heatmap, str, None);
+        _cache.insert(str, str_info.clone());
     }
 }
 
@@ -365,7 +358,7 @@ pub fn find_best_match(imatch: &mut Vec<Score>,
     }
 }
 
-pub fn score(str: &str, query: &str , cache: Option<&str>) -> Option<Score> {
+pub fn score(str: &str, query: &str , cache: Option<HashMap<&str, StrInfo>>) -> Option<Score> {
     if str.is_empty() || query.is_empty() {
         return None;
     }
