@@ -103,23 +103,26 @@ fn get_hash_for_string(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>,
     }
 }
 
-fn process_cache(str_info: &mut StrInfo, str: &str, cache: Option<HashMap<&str, StrInfo>>) {
+fn process_cache(str_info: &mut StrInfo, str: &str, cache: &mut Option<HashMap<String, StrInfo>>) {
     if cache.is_none() {
+        println!("no cache passed in");
         get_hash_for_string(&mut str_info.hash_for_string, str);
         get_heatmap_str(&mut str_info.heatmap, str, None);
         return;
     }
 
-    let mut _cache: HashMap<&str, StrInfo> = cache.unwrap();
+    let _cache = cache.as_mut().unwrap();
 
     if _cache.contains_key(str) {
+        println!("found cache");
         let data: StrInfo = _cache.get(str).unwrap().clone();
         str_info.hash_for_string = data.hash_for_string;
         str_info.heatmap = data.heatmap;
     } else {
+        println!("no cache found");
         get_hash_for_string(&mut str_info.hash_for_string, str);
         get_heatmap_str(&mut str_info.heatmap, str, None);
-        _cache.insert(str, str_info.clone());
+        _cache.insert(str.to_string(), str_info.clone());
     }
 }
 
@@ -358,7 +361,7 @@ pub fn find_best_match(imatch: &mut Vec<Score>,
     }
 }
 
-pub fn score(str: &str, query: &str , cache: Option<HashMap<&str, StrInfo>>) -> Option<Score> {
+pub fn score(str: &str, query: &str , cache: &mut Option<HashMap<String, StrInfo>>) -> Option<Score> {
     if str.is_empty() || query.is_empty() {
         return None;
     }
