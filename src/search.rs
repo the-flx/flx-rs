@@ -369,11 +369,7 @@ pub fn score(str: &str, query: &str) -> Option<Score> {
         &mut match_cache,
     );
 
-    if optimal_match.is_empty() {
-        return None;
-    }
-
-    let mut result_1 = optimal_match[0].clone();
+    let mut result_1 = optimal_match.get(0)?.clone();
     let caar = result_1.indices.len();
 
     if full_match_boost && caar == str.len() {
