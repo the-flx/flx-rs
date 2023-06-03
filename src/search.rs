@@ -266,18 +266,13 @@ pub fn find_best_match(
     q_index: i32,
     match_cache: &mut HashMap<u32, Vec<Score>>,
 ) {
-    let greater_num: u32 = if greater_than != None {
-        greater_than.unwrap()
-    } else {
-        0
-    };
+    let greater_num: u32 = greater_than.unwrap_or(0);
     let hash_key: u32 = q_index as u32 + (greater_num * query_length as u32);
     let hash_value: Option<&Vec<Score>> = match_cache.get(&hash_key);
 
-    if !hash_value.is_none() {
-        // Process match_cache here
+    if let Some(hash_value) = hash_value {
         imatch.clear();
-        for val in hash_value.unwrap() {
+        for val in hash_value {
             imatch.push(val.clone());
         }
     } else {
