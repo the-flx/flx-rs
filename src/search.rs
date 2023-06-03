@@ -47,13 +47,10 @@ fn boundary(last_char: Option<u32>, char: Option<u32>) -> bool {
 }
 
 fn inc_vec(vec: &mut Vec<i32>, inc: Option<i32>, beg: Option<i32>, end: Option<i32>) {
-    let _inc = inc.unwrap_or(1);
-    let mut _beg = beg.unwrap_or(0);
-    let _end = end.unwrap_or(vec.len() as i32);
-    while _beg < _end {
-        vec[_beg as usize] += _inc;
-        _beg += 1;
-    }
+    let inc = inc.unwrap_or(1);
+    let beg = beg.unwrap_or(0) as usize;
+    let end = end.unwrap_or(vec.len() as i32) as usize;
+    vec[beg..end].iter_mut().for_each(|e| *e += inc);
 }
 
 fn get_hash_for_string(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>, str: &str) {
