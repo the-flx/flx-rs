@@ -116,11 +116,11 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
         }
 
         // ++++ -45 penalize extension
-        if last_char != None && last_char.unwrap() == penalty_lead {
+        if last_char.is_some_and(|c| c == penalty_lead) {
             scores[index1] += -45;
         }
 
-        if group_separator != None && group_separator.unwrap() == char {
+        if group_separator.is_some_and(|c| c == char) {
             group_alist[0][1] = group_word_count;
             group_word_count = 0;
             group_alist.insert(0, vec![index1 as i32, group_word_count]);
@@ -223,17 +223,18 @@ fn bigger_sublist(
     if sorted_list == None {
         return;
     }
+
     let _sorted_list: &VecDeque<Option<u32>> = sorted_list.unwrap();
-    if val != None {
-        let _val: u32 = val.unwrap();
+
+    if let Some(val) = val {
         for sub in _sorted_list {
-            if sub.unwrap() > _val {
-                result.push_back(Some(sub.unwrap()));
+            if sub.unwrap() > val {
+                result.push_back(*sub)
             }
         }
     } else {
         for sub in _sorted_list {
-            result.push_back(Some(sub.unwrap()));
+            result.push_back(*sub)
         }
     }
 }
