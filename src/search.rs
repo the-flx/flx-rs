@@ -26,11 +26,11 @@ fn word(char: Option<u32>) -> bool {
 }
 
 fn capital(char: Option<u32>) -> bool {
-    if char.is_none() {
-        return false;
+    match char.map(char::from_u32) {
+        Some(Some(ch)) => word(char) && ch.is_uppercase(),
+        Some(None) => panic!("{:?} is not a valid char", char),
+        None => false,
     }
-    let _char: Option<char> = char::from_u32(char.unwrap());
-    return word(char) && _char.unwrap().is_uppercase()
 }
 
 fn boundary(last_char: Option<u32>, char: Option<u32>) -> bool {
