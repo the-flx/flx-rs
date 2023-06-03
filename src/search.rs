@@ -46,8 +46,7 @@ fn boundary(last_char: Option<u32>, char: Option<u32>) -> bool {
     return false;
 }
 
-fn inc_vec(vec: &mut Vec<i32>, inc: Option<i32>, beg: Option<i32>, end: Option<i32>) {
-    let inc = inc.unwrap_or(1);
+fn inc_vec(vec: &mut Vec<i32>, inc: i32, beg: Option<i32>, end: Option<i32>) {
     let beg = beg.unwrap_or(0) as usize;
     let end = end.unwrap_or(vec.len() as i32) as usize;
     vec[beg..end].iter_mut().for_each(|e| *e += inc);
@@ -140,7 +139,7 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
 
     // ++++ slash group-count penalty
     if separator_count != 0 {
-        inc_vec(scores, Some(group_count * -2), None, None);
+        inc_vec(scores, group_count * -2, None, None);
     }
 
     let mut index2 = separator_count;
@@ -180,7 +179,7 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
             }
         }
 
-        inc_vec(scores, Some(num), Some(group_start + 1), last_group_limit);
+        inc_vec(scores, num, Some(group_start + 1), last_group_limit);
 
         let mut cddr_group = group.clone();
         cddr_group.remove(0);
