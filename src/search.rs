@@ -55,26 +55,28 @@ fn inc_vec(vec: &mut Vec<i32>, inc: Option<i32>, beg: Option<i32>, end: Option<i
 
 fn get_hash_for_string(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>, str: &str) {
     result.clear();
-    let str_len: i32 = str.len() as i32;
-    let mut index: i32 = str_len - 1;
-    let mut char: Option<u32>;
-    let mut down_char: Option<u32>;
 
-    while 0 <= index {
-        char = Some(str.chars().nth(index as usize).unwrap() as u32);
+    str.char_indices()
+        .map(|(pos, ch)| (pos as u32, u32::from(ch)))
+        .rev()
+        .for_each(|(idx, ch)| {
+            let down_char = if capital(Some(ch)) {
+                result.entry(Some(ch)).or_default().push_front(Some(idx));
 
-        if capital(char) {
-            result.entry(char).or_insert_with(VecDeque::new).push_front(Some(index as u32));
-            let valid: Option<char> = char::from_u32(char.unwrap());
-            down_char = Some(valid.unwrap().to_lowercase().next().unwrap() as u32);
-        } else {
-            down_char = char;
-        }
+                u32::from(
+                    char::from_u32(ch)
+                        .and_then(|ch| ch.to_lowercase().next())
+                        .unwrap(),
+                )
+            } else {
+                ch
+            };
 
-        result.entry(down_char).or_insert_with(VecDeque::new).push_front(Some(index as u32));
-
-        index -= 1;
-    }
+            result
+                .entry(Some(down_char))
+                .or_default()
+                .push_front(Some(idx as u32));
+        })
 }
 
 pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option<char>) {
