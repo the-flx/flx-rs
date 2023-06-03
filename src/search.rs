@@ -37,12 +37,15 @@ fn boundary(last_char: Option<u32>, char: Option<u32>) -> bool {
     if last_char.is_none() {
         return true;
     }
+
     if !capital(last_char) && capital(char) {
         return true;
     }
+
     if !word(last_char) && word(char) {
         return true;
     }
+
     return false;
 }
 
@@ -182,12 +185,8 @@ pub fn get_heatmap_str(str: &str, group_separator: Option<char>) -> Vec<i32> {
         let mut cddr_group = group.clone();
         cddr_group.remove(0);
         cddr_group.remove(0);
-        let mut word_index = (words_length - 1) as i32;
-        let mut last_word = if last_group_limit != None {
-            last_group_limit.unwrap()
-        } else {
-            str_len as i32
-        };
+        let mut word_index = words_length as i32 - 1;
+        let mut last_word = last_group_limit.unwrap_or(str_len as i32);
 
         for word in cddr_group {
             // ++++  beg word bonus AND
