@@ -22,11 +22,7 @@ pub const WORD_SEPARATORS: [u32; 7] = [
 const DEFAULT_SCORE: i32 = -35;
 
 fn word(char: Option<u32>) -> bool {
-    if char.is_none() {
-        return false;
-    }
-    let _char: u32 = char.unwrap();
-    return !WORD_SEPARATORS.contains(&_char)
+    char.is_some_and(|c| !WORD_SEPARATORS.contains(&c))
 }
 
 fn capital(char: Option<u32>) -> bool {
