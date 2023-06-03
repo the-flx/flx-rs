@@ -52,9 +52,8 @@ fn inc_vec(vec: &mut Vec<i32>, inc: i32, beg: Option<i32>, end: Option<i32>) {
     vec[beg..end].iter_mut().for_each(|e| *e += inc);
 }
 
-fn get_hash_for_string(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>, str: &str) {
-    result.clear();
-
+fn get_hash_for_string(str: &str) -> HashMap<Option<u32>, VecDeque<Option<u32>>> {
+    let mut result = HashMap::<_, VecDeque<_>>::new();
     str.char_indices()
         .map(|(pos, ch)| (pos as u32, u32::from(ch)))
         .rev()
@@ -75,16 +74,15 @@ fn get_hash_for_string(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>,
                 .entry(Some(down_char))
                 .or_default()
                 .push_front(Some(idx as u32));
-        })
+        });
+
+    result
 }
 
-pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option<char>) {
+pub fn get_heatmap_str(str: &str, group_separator: Option<char>) -> Vec<i32> {
     let str_len = str.len();
     let str_last_index = str_len - 1;
-    scores.clear();
-    for _n in 0..str_len {
-        scores.push(DEFAULT_SCORE);
-    }
+    let mut scores = vec![DEFAULT_SCORE; str_len];
     let penalty_lead = '.' as u32;
     let mut group_alist = vec![vec![-1, 0]];
 
@@ -139,7 +137,7 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
 
     // ++++ slash group-count penalty
     if separator_count != 0 {
-        inc_vec(scores, group_count * -2, None, None);
+        inc_vec(&mut scores, group_count * -2, None, None);
     }
 
     let mut index2 = separator_count;
@@ -179,7 +177,7 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
             }
         }
 
-        inc_vec(scores, num, Some(group_start + 1), last_group_limit);
+        inc_vec(&mut scores, num, Some(group_start + 1), last_group_limit);
 
         let mut cddr_group = group.clone();
         cddr_group.remove(0);
@@ -212,6 +210,8 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
         last_group_limit = Some(group_start + 1);
         index2 -= 1;
     }
+
+    scores
 }
 
 fn bigger_sublist(
@@ -347,11 +347,8 @@ pub fn score(str: &str, query: &str) -> Option<Score> {
         return None;
     }
 
-    let mut str_info = HashMap::new();
-    get_hash_for_string(&mut str_info, str);
-
-    let mut heatmap = Vec::new();
-    get_heatmap_str(&mut heatmap, str, None);
+    let str_info = get_hash_for_string(str);
+    let heatmap = get_heatmap_str(str, None);
 
     let query_length = query.len() as i32;
     let full_match_boost = (1 < query_length) && (query_length < 5);
