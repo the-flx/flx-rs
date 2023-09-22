@@ -17,6 +17,11 @@ Add this to your `Cargo.toml`:
 flx_rs = "0.1.0"
 ```
 
+## 🔍 See Also
+
+- [flx](https://github.com/lewang/flx) - Original algorithm
+- [FlxCs](https://github.com/jcs090218/FlxCs) - Port in C#
+
 ## License
 
 flx-rs is distributed under the terms of the MIT license.
