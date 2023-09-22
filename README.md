@@ -20,7 +20,7 @@ flx_rs = "0.1.0"
 ## 🔍 See Also
 
 - [flx](https://github.com/lewang/flx) - Original algorithm
-- [FlxCs](https://github.com/jcs090218/FlxCs) - Port in C#
+- [FlxCs](https://github.com/jcs090218/FlxCs) - Rewrite emacs-flx in C#
 
 ## License
 
