@@ -30,7 +30,7 @@ fn main() {
 }
 ```
 
-## Example
+## 📂 Example
 
 - [flx-rs](https://github.com/jcs-elpa/flx-rs) - Emacs package uses this as dynamic module
 
