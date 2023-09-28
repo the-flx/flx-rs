@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
 
+## 0.1.5
+> Released Sep 28, 2023
+
+* Add document string (3ee2a665d8d0dfc47d9ed26723921708acc06a47)
+
 ## 0.1.4
 > Released May 23, 2022
 
