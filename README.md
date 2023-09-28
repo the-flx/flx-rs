@@ -17,6 +17,23 @@ Add this to your `Cargo.toml`:
 flx-rs = "0.1.4"
 ```
 
+This package only exposed one function `flx_rs::score` that takes only two arguments
+`(str: &str, query: &str)`.
+
+```rust
+use flx_rs;
+
+fn main() {
+    let score : Option<flx_rs::Score> = flx_rs::score("switch-to-buffer", "stb");
+
+    println!("Score: {}", score.unwrap().score);   // Score: 237
+}
+```
+
+## Example
+
+- [flx-rs](https://github.com/jcs-elpa/flx-rs) - Emacs package uses this as dynamic module
+
 ## 🔍 See Also
 
 - [flx](https://github.com/lewang/flx) - Original algorithm
