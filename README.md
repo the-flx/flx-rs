@@ -30,6 +30,8 @@ fn main() {
 }
 ```
 
+See official documentation in https://docs.rs/flx-rs/latest/flx_rs/.
+
 ## 📂 Example
 
 - [flx-rs](https://github.com/jcs-elpa/flx-rs) - Emacs package uses this as dynamic module
