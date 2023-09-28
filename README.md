@@ -14,7 +14,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-flx_rs = "0.1.0"
+flx_rs = "0.1.4"
 ```
 
 ## 🔍 See Also
