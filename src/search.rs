@@ -10,6 +10,7 @@
 use std::collections::{HashMap, VecDeque};
 use std::cmp::min;
 
+/// List of characters that act as word separators in flx.
 pub const WORD_SEPARATORS: [u32; 7] = [
     ' ' as u32,
     '-' as u32,
@@ -20,8 +21,14 @@ pub const WORD_SEPARATORS: [u32; 7] = [
     '\\' as u32,
 ];
 
+/// Magic number for default +/- score.
 const DEFAULT_SCORE: i32 = -35;
 
+/// Check if char is a word character.
+/// 
+///  # Arguments
+/// 
+/// * `char` - Character we use to check for word.
 fn word(char: Option<u32>) -> bool {
     if char.is_none() {
         return false;
@@ -30,6 +37,11 @@ fn word(char: Option<u32>) -> bool {
     return !WORD_SEPARATORS.contains(&_char)
 }
 
+/// Check if CHAR is an uppercase character."
+/// 
+///  # Arguments
+/// 
+/// * `char` - Character we use to check for capitalization.
 fn capital(char: Option<u32>) -> bool {
     if char.is_none() {
         return false;
@@ -38,6 +50,9 @@ fn capital(char: Option<u32>) -> bool {
     return word(char) && _char.unwrap().is_uppercase()
 }
 
+/// Check if LAST-CHAR is the end of a word and CHAR the start of the next.
+///
+/// This function is camel-case aware.
 fn boundary(last_char: Option<u32>, char: Option<u32>) -> bool {
     if last_char.is_none() {
         return true;
@@ -51,6 +66,7 @@ fn boundary(last_char: Option<u32>, char: Option<u32>) -> bool {
     return false
 }
 
+/// Increment each element in VEC between BEG and END by INC.
 fn inc_vec(vec: &mut Vec<i32>, inc: Option<i32>, beg: Option<i32>, end: Option<i32>) {
     let _inc = inc.unwrap_or(1);
     let mut _beg = beg.unwrap_or(0);
@@ -61,6 +77,8 @@ fn inc_vec(vec: &mut Vec<i32>, inc: Option<i32>, beg: Option<i32>, end: Option<i
     }
 }
 
+/// Return hash-table for string where keys are characters.
+/// Value is a sorted list of indexes for character occurrences.
 fn get_hash_for_string(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>, str: &str) {
     result.clear();
     let str_len: i32 = str.len() as i32;
@@ -85,6 +103,9 @@ fn get_hash_for_string(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>,
     }
 }
 
+/// Generate the heatmap vector of string.
+///
+/// See documentation for logic.
 pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option<char>) {
     let str_len: usize = str.len();
     let str_last_index: usize = str_len - 1;
@@ -212,6 +233,9 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
     }
 }
 
+/// Return sublist bigger than VAL from sorted SORTED-LIST.
+/// 
+/// If VAL is nil, return entire list.
 fn bigger_sublist(result: &mut VecDeque<Option<u32>>,
                   sorted_list: Option<&VecDeque<Option<u32>>>,
                   val: Option<u32>) {
@@ -246,6 +270,8 @@ impl Score {
     }
 }
 
+/// Recursively compute the best match for a string, passed as STR-INFO and
+/// HEATMAP, according to QUERY.
 pub fn find_best_match(imatch: &mut Vec<Score>,
                        str_info: HashMap<Option<u32>, VecDeque<Option<u32>>>,
                        heatmap: Vec<i32>,
@@ -321,6 +347,7 @@ pub fn find_best_match(imatch: &mut Vec<Score>,
     }
 }
 
+/// Return best score matching QUERY against STR.
 pub fn score(str: &str, query: &str) -> Option<Score> {
     if str.is_empty() || query.is_empty() {
         return None;
