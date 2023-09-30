@@ -34,15 +34,21 @@ See official documentation in https://docs.rs/flx-rs/latest/flx_rs/.
 
 ## 📂 Example
 
-- [flx-rs](https://github.com/jcs-elpa/flx-rs) - Emacs package uses this as dynamic module
+- [flx-rs][]) - Emacs package uses this as dynamic module
 
 ## 🔍 See Also
 
-- [flx](https://github.com/lewang/flx) - Original algorithm
-- [FlxCs](https://github.com/jcs090218/FlxCs) - Rewrite emacs-flx in C#
+- [flx][] - Original algorithm
+- [FlxCs][] - Rewrite emacs-flx in C#
 
 ## License
 
 flx-rs is distributed under the terms of the MIT license.
 
 See [LICENSE](./LICENSE) for details.
+
+
+[flx-rs]: https://github.com/jcs-elpa/flx-rs
+
+[flx]: https://github.com/lewang/flx
+[FlxCs]: https://github.com/jcs090218/FlxCs
