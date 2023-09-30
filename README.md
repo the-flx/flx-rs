@@ -34,7 +34,7 @@ See official documentation in https://docs.rs/flx-rs/latest/flx_rs/.
 
 ## 📂 Example
 
-- [flx-rs][]) - Emacs package uses this as dynamic module
+- [flx-rs][] - Emacs package uses this as dynamic module
 
 ## 🔍 See Also
 
