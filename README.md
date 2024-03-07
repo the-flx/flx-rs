@@ -44,7 +44,7 @@ See official documentation in https://docs.rs/flx-rs/latest/flx_rs/.
 
 ## ⚜️ License
 
-flx-rs is distributed under the terms of the MIT license.
+`flx-rs` is distributed under the terms of the MIT license.
 
 See [LICENSE](./LICENSE) for details.
 
