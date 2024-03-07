@@ -38,9 +38,10 @@ See official documentation in https://docs.rs/flx-rs/latest/flx_rs/.
 
 ## 🔍 See Also
 
-- [flx][] - Original algorithm
+- [flx][] - Original algorithm in Emacs Lisp
 - [FlxCs][] - Rewrite emacs-flx in C#
 - [flx-ts][] - Rewrite emacs-flx in TypeScript, with added support for JavaScript
+- [flx-c][] - Rewrite emacs-flx in C
 
 ## ⚜️ License
 
@@ -51,8 +52,8 @@ See [LICENSE](./LICENSE) for details.
 
 <!-- Links -->
 
-[flx-rs]: https://github.com/jcs-elpa/flx-rs
-
 [flx]: https://github.com/lewang/flx
+[flx-rs]: https://github.com/jcs-elpa/flx-rs
 [FlxCs]: https://github.com/jcs090218/FlxCs
 [flx-ts]: https://github.com/jcs090218/flx-ts
+[flx-c]: https://github.com/jcs090218/flx-c
