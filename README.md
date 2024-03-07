@@ -34,7 +34,7 @@ See official documentation in https://docs.rs/flx-rs/latest/flx_rs/.
 
 ## 📂 Example
 
-- [flx-rs][] - Emacs package uses this as dynamic module
+- [flx-rs](https://github.com/jcs-elpa/flx-rs) - Emacs package uses this as dynamic module
 
 ## 🔍 See Also
 
@@ -53,7 +53,7 @@ See [LICENSE](./LICENSE) for details.
 <!-- Links -->
 
 [flx]: https://github.com/lewang/flx
-[flx-rs]: https://github.com/jcs-elpa/flx-rs
+[flx-rs]: https://github.com/jcs090218/flx-rs
 [FlxCs]: https://github.com/jcs090218/FlxCs
 [flx-ts]: https://github.com/jcs090218/flx-ts
 [flx-c]: https://github.com/jcs090218/flx-c
