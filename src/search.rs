@@ -1,3 +1,4 @@
+use std::cmp::min;
 /**
  * $File: search.rs $
  * $Date: 2021-10-27 20:23:18 $
@@ -6,9 +7,7 @@
  * $Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2021 by Shen, Jen-Chieh $
  */
-
 use std::collections::{HashMap, VecDeque};
-use std::cmp::min;
 
 /// List of characters that act as word separators in flx.
 pub const WORD_SEPARATORS: [u32; 7] = [
@@ -25,29 +24,29 @@ pub const WORD_SEPARATORS: [u32; 7] = [
 const DEFAULT_SCORE: i32 = -35;
 
 /// Check if char is a word character.
-/// 
+///
 ///  # Arguments
-/// 
+///
 /// * `char` - Character we use to check for word.
 fn word(char: Option<u32>) -> bool {
     if char.is_none() {
         return false;
     }
     let _char: u32 = char.unwrap();
-    return !WORD_SEPARATORS.contains(&_char)
+    return !WORD_SEPARATORS.contains(&_char);
 }
 
 /// Check if CHAR is an uppercase character."
-/// 
+///
 ///  # Arguments
-/// 
+///
 /// * `char` - Character we use to check for capitalization.
 fn capital(char: Option<u32>) -> bool {
     if char.is_none() {
         return false;
     }
     let _char: Option<char> = char::from_u32(char.unwrap());
-    return word(char) && _char.unwrap().is_uppercase()
+    return word(char) && _char.unwrap().is_uppercase();
 }
 
 /// Check if LAST-CHAR is the end of a word and CHAR the start of the next.
@@ -63,7 +62,7 @@ fn boundary(last_char: Option<u32>, char: Option<u32>) -> bool {
     if !word(last_char) && word(char) {
         return true;
     }
-    return false
+    return false;
 }
 
 /// Increment each element in VEC between BEG and END by INC.
@@ -90,14 +89,20 @@ fn get_hash_for_string(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>,
         char = Some(str.chars().nth(index as usize).unwrap() as u32);
 
         if capital(char) {
-            result.entry(char).or_insert_with(VecDeque::new).push_front(Some(index as u32));
+            result
+                .entry(char)
+                .or_insert_with(VecDeque::new)
+                .push_front(Some(index as u32));
             let valid: Option<char> = char::from_u32(char.unwrap());
             down_char = Some(valid.unwrap().to_lowercase().next().unwrap() as u32);
         } else {
             down_char = char;
         }
 
-        result.entry(down_char).or_insert_with(VecDeque::new).push_front(Some(index as u32));
+        result
+            .entry(down_char)
+            .or_insert_with(VecDeque::new)
+            .push_front(Some(index as u32));
 
         index -= 1;
     }
@@ -110,7 +115,9 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
     let str_len: usize = str.len();
     let str_last_index: usize = str_len - 1;
     scores.clear();
-    for _n in 0..str_len { scores.push(DEFAULT_SCORE); }
+    for _n in 0..str_len {
+        scores.push(DEFAULT_SCORE);
+    }
     let penalty_lead: u32 = '.' as u32;
     let mut group_alist: Vec<Vec<i32>> = vec![vec![-1, 0]];
 
@@ -126,7 +133,11 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
         // before we find any words, all separaters are
         // considered words of length 1.  This is so "foo/__ab"
         // gets penalized compared to "foo/ab".
-        let effective_last_char: Option<u32> = if group_word_count == 0 { None } else { last_char };
+        let effective_last_char: Option<u32> = if group_word_count == 0 {
+            None
+        } else {
+            last_char
+        };
 
         if boundary(effective_last_char, Some(char as u32)) {
             group_alist[0].insert(2, index1 as i32);
@@ -197,7 +208,7 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
             if index2 == 0 {
                 num = -3;
             } else {
-                num = -5 + ((index2 as i32) -1);
+                num = -5 + ((index2 as i32) - 1);
             }
         }
 
@@ -207,7 +218,11 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
         cddr_group.remove(0);
         cddr_group.remove(0);
         let mut word_index: i32 = (words_length - 1) as i32;
-        let mut last_word: i32 = if last_group_limit != None { last_group_limit.unwrap() } else { str_len as i32 };
+        let mut last_word: i32 = if last_group_limit != None {
+            last_group_limit.unwrap()
+        } else {
+            str_len as i32
+        };
 
         for word in cddr_group {
             // ++++  beg word bonus AND
@@ -216,12 +231,10 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
             let mut index3: i32 = word;
             let mut char_i: i32 = 0;
             while index3 < last_word {
-                scores[index3 as usize] +=
-                    (-3 * word_index) -  // ++++ word order penalty
-                    char_i;  // ++++ char order penalty
+                scores[index3 as usize] += (-3 * word_index) -  // ++++ word order penalty
+                    char_i; // ++++ char order penalty
                 char_i += 1;
-
-                index3 +=  1;
+                index3 += 1;
             }
 
             last_word = word;
@@ -234,11 +247,13 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
 }
 
 /// Return sublist bigger than VAL from sorted SORTED-LIST.
-/// 
+///
 /// If VAL is nil, return entire list.
-fn bigger_sublist(result: &mut VecDeque<Option<u32>>,
-                  sorted_list: Option<&VecDeque<Option<u32>>>,
-                  val: Option<u32>) {
+fn bigger_sublist(
+    result: &mut VecDeque<Option<u32>>,
+    sorted_list: Option<&VecDeque<Option<u32>>>,
+    val: Option<u32>,
+) {
     if sorted_list == None {
         return;
     }
@@ -258,32 +273,44 @@ fn bigger_sublist(result: &mut VecDeque<Option<u32>>,
 }
 
 #[derive(Debug, Clone)]
-pub struct Score {
+pub struct Result {
     pub indices: Vec<i32>,
     pub score: i32,
     pub tail: i32,
 }
 
-impl Score {
-    pub fn new(indices: Vec<i32>, score: i32, tail: i32) -> Score {
-        Score { indices, score, tail }
+impl Result {
+    pub fn new(indices: Vec<i32>, score: i32, tail: i32) -> Result {
+        Result {
+            indices,
+            score,
+            tail,
+        }
     }
 }
 
 /// Recursively compute the best match for a string, passed as STR-INFO and
 /// HEATMAP, according to QUERY.
-pub fn find_best_match(imatch: &mut Vec<Score>,
-                       str_info: HashMap<Option<u32>, VecDeque<Option<u32>>>,
-                       heatmap: Vec<i32>,
-                       greater_than: Option<u32>,
-                       query: &str, query_length: i32,
-                       q_index: i32,
-                       match_cache: &mut HashMap<u32, Vec<Score>>) {
-    let greater_num: u32 = if greater_than != None { greater_than.unwrap() } else { 0 };
+pub fn find_best_match(
+    imatch: &mut Vec<Result>,
+    str_info: HashMap<Option<u32>, VecDeque<Option<u32>>>,
+    heatmap: Vec<i32>,
+    greater_than: Option<u32>,
+    query: &str,
+    query_length: i32,
+    q_index: i32,
+    match_cache: &mut HashMap<u32, Vec<Result>>,
+) {
+    let greater_num: u32 = if greater_than != None {
+        greater_than.unwrap()
+    } else {
+        0
+    };
     let hash_key: u32 = q_index as u32 + (greater_num * query_length as u32);
-    let hash_value: Option<&Vec<Score>> = match_cache.get(&hash_key);
+    let hash_value: Option<&Vec<Result>> = match_cache.get(&hash_key);
 
-    if !hash_value.is_none() {  // Process match_cache here
+    if !hash_value.is_none() {
+        // Process match_cache here
         imatch.clear();
         for val in hash_value.unwrap() {
             imatch.push(val.clone());
@@ -303,13 +330,22 @@ pub fn find_best_match(imatch: &mut Vec<Score>,
                 let mut indices: Vec<i32> = Vec::new();
                 let _index: i32 = index.unwrap() as i32;
                 indices.push(_index);
-                imatch.push(Score::new(indices, heatmap[_index as usize], 0));
+                imatch.push(Result::new(indices, heatmap[_index as usize], 0));
             }
         } else {
             for index in indexes {
                 let _index: i32 = index.unwrap() as i32;
-                let mut elem_group: Vec<Score> = Vec::new();
-                find_best_match(&mut elem_group, str_info.clone(), heatmap.clone(), Some(_index as u32), query, query_length, q_index + 1, match_cache);
+                let mut elem_group: Vec<Result> = Vec::new();
+                find_best_match(
+                    &mut elem_group,
+                    str_info.clone(),
+                    heatmap.clone(),
+                    Some(_index as u32),
+                    query,
+                    query_length,
+                    q_index + 1,
+                    match_cache,
+                );
 
                 for elem in elem_group {
                     let caar: i32 = elem.indices[0];
@@ -336,7 +372,7 @@ pub fn find_best_match(imatch: &mut Vec<Score>,
                         if (caar - 1) == _index {
                             tail = cddr + 1;
                         }
-                        imatch.push(Score::new(indices, temp_score, tail));
+                        imatch.push(Result::new(indices, temp_score, tail));
                     }
                 }
             }
@@ -348,7 +384,7 @@ pub fn find_best_match(imatch: &mut Vec<Score>,
 }
 
 /// Return best score matching QUERY against STR.
-pub fn score(str: &str, query: &str) -> Option<Score> {
+pub fn score(str: &str, query: &str) -> Option<Result> {
     if str.is_empty() || query.is_empty() {
         return None;
     }
@@ -360,15 +396,24 @@ pub fn score(str: &str, query: &str) -> Option<Score> {
 
     let query_length: i32 = query.len() as i32;
     let full_match_boost: bool = (1 < query_length) && (query_length < 5);
-    let mut match_cache: HashMap<u32, Vec<Score>> = HashMap::new();
-    let mut optimal_match: Vec<Score> = Vec::new();
-    find_best_match(&mut optimal_match, str_info, heatmap, None, query, query_length, 0, &mut match_cache);
+    let mut match_cache: HashMap<u32, Vec<Result>> = HashMap::new();
+    let mut optimal_match: Vec<Result> = Vec::new();
+    find_best_match(
+        &mut optimal_match,
+        str_info,
+        heatmap,
+        None,
+        query,
+        query_length,
+        0,
+        &mut match_cache,
+    );
 
     if optimal_match.is_empty() {
         return None;
     }
 
-    let mut result_1: Score = optimal_match[0].clone();
+    let mut result_1: Result = optimal_match[0].clone();
     let caar: usize = result_1.indices.len();
 
     if full_match_boost && caar == str.len() {
