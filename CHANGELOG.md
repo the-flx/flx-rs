@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
 
+## 0.1.7 (Unreleased)
+> Released N/A
+
+* N/A
+
 ## 0.1.6
 > Released Mar 12, 2024
 
