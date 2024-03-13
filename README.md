@@ -14,7 +14,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-flx-rs = "0.1.5"
+flx-rs = "0.1.6"
 ```
 
 This package only exposed one function `flx_rs::score` that takes only two arguments
@@ -24,17 +24,17 @@ This package only exposed one function `flx_rs::score` that takes only two argum
 use flx_rs;
 
 fn main() {
-    let score : Option<flx_rs::Score> = flx_rs::score("switch-to-buffer", "stb");
+    let result : Option<flx_rs::Result> = flx_rs::score("switch-to-buffer", "stb");
 
-    println!("Score: {}", score.unwrap().score);   // Score: 237
+    println!("Score: {}", result.unwrap().score);   // Score: 237
 }
 ```
 
-See official documentation in https://docs.rs/flx-rs/latest/flx_rs/.
+See the official documentation at https://docs.rs/flx-rs/latest/flx_rs/.
 
 ## 📂 Example
 
-- [flx-rs](https://github.com/jcs-elpa/flx-rs) - Emacs package uses this as dynamic module
+- [flx-rs](https://github.com/jcs-elpa/flx-rs) - Emacs package uses this as a dynamic module
 
 ## 🔍 See Also
 
@@ -57,3 +57,4 @@ See [LICENSE](./LICENSE) for details.
 [FlxCs]: https://github.com/jcs090218/FlxCs
 [flx-ts]: https://github.com/jcs090218/flx-ts
 [flx-c]: https://github.com/jcs090218/flx-c
+[flx-zig]: https://github.com/jcs090218/flx-zig
