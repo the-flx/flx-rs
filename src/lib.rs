@@ -8,6 +8,4 @@
  */
 mod search;
 
-pub use search::{
-    get_heatmap_str, find_best_match, score, Score
-};
+pub use search::{find_best_match, get_heatmap_str, score, Result};
