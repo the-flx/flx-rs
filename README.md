@@ -42,6 +42,7 @@ See the official documentation at https://docs.rs/flx-rs/latest/flx_rs/.
 - [FlxCs][] - Rewrite emacs-flx in C#
 - [flx-ts][] - Rewrite emacs-flx in TypeScript, with added support for JavaScript
 - [flx-c][] - Rewrite emacs-flx in C
+- [flx-zig][] - Rewrite emacs-flx in Zig
 
 ## ⚜️ License
 
