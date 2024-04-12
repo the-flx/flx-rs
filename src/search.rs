@@ -1,4 +1,3 @@
-use std::cmp::min;
 /**
  * $File: search.rs $
  * $Date: 2021-10-27 20:23:18 $
@@ -7,6 +6,7 @@ use std::cmp::min;
  * $Notice: See LICENSE.txt for modification and distribution information
  *                   Copyright © 2021 by Shen, Jen-Chieh $
  */
+use std::cmp::min;
 use std::collections::{HashMap, VecDeque};
 
 /// List of characters that act as word separators in flx.
