@@ -1,6 +1,6 @@
 [package]
 name = "flx-rs"
-version = "0.1.6"
+version = "0.2.0"
 authors = ["Jen-Chieh Shen <jenchieh94@gmail.com>"]
 description = "Rewrite emacs-flx in Rust for dynamic modules"
 repository = "https://github.com/jcs090218/flx-rs"

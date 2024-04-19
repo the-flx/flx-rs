@@ -14,7 +14,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-flx-rs = "0.1.6"
+flx-rs = "0.2.0"
 ```
 
 This package only exposed one function `flx_rs::score` that takes only two arguments
