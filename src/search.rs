@@ -32,8 +32,21 @@ fn word(char: Option<u32>) -> bool {
     if char.is_none() {
         return false;
     }
-    let _char: u32 = char.unwrap();
-    return !WORD_SEPARATORS.contains(&_char);
+    let ch: u32 = char.unwrap();
+    return !WORD_SEPARATORS.contains(&ch);
+}
+
+/// The `flx` compatible uppercase checker.
+///
+/// # Arguments
+///
+/// * `char` - The target character to check.
+fn is_uppercase(char: &Option<char>) -> bool {
+    if char.is_none() {
+        return false;
+    }
+    let ch_uw = char.unwrap();
+    return ch_uw == ch_uw.to_uppercase().next().unwrap();
 }
 
 /// Check if CHAR is an uppercase character."
@@ -45,8 +58,8 @@ fn capital(char: Option<u32>) -> bool {
     if char.is_none() {
         return false;
     }
-    let _char: Option<char> = char::from_u32(char.unwrap());
-    return word(char) && _char.unwrap().is_uppercase();
+    let ch: Option<char> = char::from_u32(char.unwrap());
+    return word(char) && is_uppercase(&ch);
 }
 
 /// Check if LAST-CHAR is the end of a word and CHAR the start of the next.
@@ -80,7 +93,7 @@ fn inc_vec(vec: &mut Vec<i32>, inc: Option<i32>, beg: Option<i32>, end: Option<i
 /// Value is a sorted list of indexes for character occurrences.
 fn get_hash_for_string(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>, str: &str) {
     result.clear();
-    let str_len: i32 = str.len() as i32;
+    let str_len: i32 = str.chars().count() as i32;
     let mut index: i32 = str_len - 1;
     let mut char: Option<u32>;
     let mut down_char: Option<u32>;
@@ -93,6 +106,7 @@ fn get_hash_for_string(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>,
                 .entry(char)
                 .or_insert_with(VecDeque::new)
                 .push_front(Some(index as u32));
+
             let valid: Option<char> = char::from_u32(char.unwrap());
             down_char = Some(valid.unwrap().to_lowercase().next().unwrap() as u32);
         } else {
@@ -112,7 +126,7 @@ fn get_hash_for_string(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>,
 ///
 /// See documentation for logic.
 pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option<char>) {
-    let str_len: usize = str.len();
+    let str_len: usize = str.chars().count();
     let str_last_index: usize = str_len - 1;
     scores.clear();
     for _n in 0..str_len {
@@ -257,16 +271,16 @@ fn bigger_sublist(
     if sorted_list == None {
         return;
     }
-    let _sorted_list: &VecDeque<Option<u32>> = sorted_list.unwrap();
+    let sl: &VecDeque<Option<u32>> = sorted_list.unwrap();
     if val != None {
-        let _val: u32 = val.unwrap();
-        for sub in _sorted_list {
-            if sub.unwrap() > _val {
+        let v: u32 = val.unwrap();
+        for sub in sl {
+            if sub.unwrap() > v {
                 result.push_back(Some(sub.unwrap()));
             }
         }
     } else {
-        for sub in _sorted_list {
+        for sub in sl {
             result.push_back(Some(sub.unwrap()));
         }
     }
@@ -328,19 +342,19 @@ pub fn find_best_match(
             // matches with their scores and return the list to parent.
             for index in indexes {
                 let mut indices: Vec<i32> = Vec::new();
-                let _index: i32 = index.unwrap() as i32;
-                indices.push(_index);
-                imatch.push(Result::new(indices, heatmap[_index as usize], 0));
+                let idx: i32 = index.unwrap() as i32;
+                indices.push(idx);
+                imatch.push(Result::new(indices, heatmap[idx as usize], 0));
             }
         } else {
             for index in indexes {
-                let _index: i32 = index.unwrap() as i32;
+                let idx: i32 = index.unwrap() as i32;
                 let mut elem_group: Vec<Result> = Vec::new();
                 find_best_match(
                     &mut elem_group,
                     str_info.clone(),
                     heatmap.clone(),
-                    Some(_index as u32),
+                    Some(idx as u32),
                     query,
                     query_length,
                     q_index + 1,
@@ -352,12 +366,12 @@ pub fn find_best_match(
                     let cadr: i32 = elem.score;
                     let cddr: i32 = elem.tail;
 
-                    if (caar - 1) == _index {
-                        temp_score = cadr + heatmap[_index as usize] +
+                    if (caar - 1) == idx {
+                        temp_score = cadr + heatmap[idx as usize] +
                             (min(cddr, 3) * 15) +  // boost contiguous matches
                             60;
                     } else {
-                        temp_score = cadr + heatmap[_index as usize];
+                        temp_score = cadr + heatmap[idx as usize];
                     }
 
                     // We only care about the optimal match, so only forward the match
@@ -367,9 +381,9 @@ pub fn find_best_match(
 
                         imatch.clear();
                         let mut indices: Vec<i32> = elem.indices.clone();
-                        indices.insert(0, _index);
+                        indices.insert(0, idx);
                         let mut tail: i32 = 0;
-                        if (caar - 1) == _index {
+                        if (caar - 1) == idx {
                             tail = cddr + 1;
                         }
                         imatch.push(Result::new(indices, temp_score, tail));
@@ -394,7 +408,7 @@ pub fn score(str: &str, query: &str) -> Option<Result> {
     let mut heatmap: Vec<i32> = Vec::new();
     get_heatmap_str(&mut heatmap, str, None);
 
-    let query_length: i32 = query.len() as i32;
+    let query_length: i32 = query.chars().count() as i32;
     let full_match_boost: bool = (1 < query_length) && (query_length < 5);
     let mut match_cache: HashMap<u32, Vec<Result>> = HashMap::new();
     let mut optimal_match: Vec<Result> = Vec::new();
@@ -416,7 +430,7 @@ pub fn score(str: &str, query: &str) -> Option<Result> {
     let mut result_1: Result = optimal_match[0].clone();
     let caar: usize = result_1.indices.len();
 
-    if full_match_boost && caar == str.len() {
+    if full_match_boost && caar == str.chars().count() {
         result_1.score += 10000;
     }
 
