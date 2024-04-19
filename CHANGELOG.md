@@ -5,10 +5,15 @@ All notable changes to this project will be documented in this file.
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
 
-## 0.1.7 (Unreleased)
+## 0.2.0 (Unreleased)
 > Released N/A
 
 * N/A
+
+## 0.2.0
+> Released Apr 18, 2024
+
+* fix: Wide character (3f18a216054fae8cee5ff36783a80c72a7a64f93)
 
 ## 0.1.6
 > Released Mar 12, 2024
