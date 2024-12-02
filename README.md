@@ -40,7 +40,7 @@ See the official documentation at https://docs.rs/flx-rs/latest/flx_rs/.
 
 `flx-rs` is distributed under the terms of the MIT license.
 
-See [LICENSE](./LICENSE) for details.
+See [`LICENSE`](./LICENSE) for details.
 
 
 <!-- Links -->
