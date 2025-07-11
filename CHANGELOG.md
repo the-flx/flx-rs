@@ -28,7 +28,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## 0.1.4
 > Released May 23, 2022
 
-* Add missing word separator (#7)
+* Add missing word separator ([#7](../../pull/7))
 
 ## 0.1.3
 > Released Nov 9, 2021
