@@ -13,17 +13,17 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## 0.2.0
 > Released Apr 18, 2024
 
-* fix: Wide character (3f18a216054fae8cee5ff36783a80c72a7a64f93)
+* fix: Wide character ([`3f18a21`](../../commit/3f18a216054fae8cee5ff36783a80c72a7a64f93))
 
 ## 0.1.6
 > Released Mar 12, 2024
 
-* chore: Rename struct `Score` to `Result` (#10)
+* chore: Rename struct `Score` to `Result` ([#10](../../pull/10))
 
 ## 0.1.5
 > Released Sep 28, 2023
 
-* Add document string (3ee2a665d8d0dfc47d9ed26723921708acc06a47)
+* Add document string ([`3ee2a66`](../../commit/3ee2a665d8d0dfc47d9ed26723921708acc06a47))
 
 ## 0.1.4
 > Released May 23, 2022
