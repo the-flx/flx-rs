@@ -1,4 +1,5 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Rust Version](https://img.shields.io/badge/Rust-1.91.1+-black.svg?logo=rust)](https://rust-lang.org/)
 [![Release](https://img.shields.io/github/tag/the-flx/flx-rs.svg?label=release&logo=github)](https://github.com/the-flx/flx-rs/releases/latest)
 [![crates.io](https://img.shields.io/crates/v/flx-rs.svg?logo=rust)](https://crates.io/crates/flx-rs)
 [![crates.io.d](https://img.shields.io/crates/d/flx-rs)](https://crates.io/crates/flx-rs)
