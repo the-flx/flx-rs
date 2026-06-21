@@ -29,11 +29,7 @@ const DEFAULT_SCORE: i32 = -35;
 ///
 /// * `char` - Character we use to check for word.
 fn word(char: Option<u32>) -> bool {
-    if char.is_none() {
-        return false;
-    }
-    let ch: u32 = char.unwrap();
-    return !WORD_SEPARATORS.contains(&ch);
+    char.is_some_and(|c| !WORD_SEPARATORS.contains(&c))
 }
 
 /// The `flx` compatible uppercase checker.
@@ -42,11 +38,7 @@ fn word(char: Option<u32>) -> bool {
 ///
 /// * `char` - The target character to check.
 fn is_uppercase(char: &Option<char>) -> bool {
-    if char.is_none() {
-        return false;
-    }
-    let ch_uw = char.unwrap();
-    return ch_uw == ch_uw.to_uppercase().next().unwrap();
+    char.is_some_and(|c| c.to_uppercase().next().is_some_and(|ch_up| c == ch_up))
 }
 
 /// Check if CHAR is an uppercase character."
@@ -55,11 +47,7 @@ fn is_uppercase(char: &Option<char>) -> bool {
 ///
 /// * `char` - Character we use to check for capitalization.
 fn capital(char: Option<u32>) -> bool {
-    if char.is_none() {
-        return false;
-    }
-    let ch: Option<char> = char::from_u32(char.unwrap());
-    return word(char) && is_uppercase(&ch);
+    char.is_some_and(|c| word(char) && is_uppercase(&char::from_u32(c)))
 }
 
 /// Check if LAST-CHAR is the end of a word and CHAR the start of the next.
@@ -75,17 +63,17 @@ fn boundary(last_char: Option<u32>, char: Option<u32>) -> bool {
     if !word(last_char) && word(char) {
         return true;
     }
-    return false;
+    false
 }
 
 /// Increment each element in VEC between BEG and END by INC.
 fn inc_vec(vec: &mut Vec<i32>, inc: Option<i32>, beg: Option<i32>, end: Option<i32>) {
-    let _inc = inc.unwrap_or(1);
-    let mut _beg = beg.unwrap_or(0);
-    let _end = end.unwrap_or(vec.len() as i32);
-    while _beg < _end {
-        vec[_beg as usize] += _inc;
-        _beg += 1;
+    let inc = inc.unwrap_or(1);
+    let mut beg = beg.unwrap_or(0);
+    let end = end.unwrap_or(vec.len() as i32);
+    while beg < end {
+        vec[beg as usize] += inc;
+        beg += 1;
     }
 }
 
@@ -99,7 +87,7 @@ fn get_hash_for_string(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>,
     let mut down_char: Option<u32>;
 
     while 0 <= index {
-        char = Some(str.chars().nth(index as usize).unwrap() as u32);
+        char = str.chars().nth(index as usize).map(|c| c as u32);
 
         if capital(char) {
             result
@@ -107,8 +95,8 @@ fn get_hash_for_string(result: &mut HashMap<Option<u32>, VecDeque<Option<u32>>>,
                 .or_insert_with(VecDeque::new)
                 .push_front(Some(index as u32));
 
-            let valid: Option<char> = char::from_u32(char.unwrap());
-            down_char = Some(valid.unwrap().to_lowercase().next().unwrap() as u32);
+            let valid: Option<char> = char.and_then(char::from_u32);
+            down_char = valid.and_then(|c| c.to_lowercase().next().map(|c| c as u32));
         } else {
             down_char = char;
         }
@@ -141,9 +129,8 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
     // Establish baseline mapping
     let mut last_char: Option<u32> = None;
     let mut group_word_count: i32 = 0;
-    let mut index1: usize = 0;
 
-    for char in str.chars() {
+    for (index1, char) in str.chars().enumerate() {
         // before we find any words, all separaters are
         // considered words of length 1.  This is so "foo/__ab"
         // gets penalized compared to "foo/ab".
@@ -162,11 +149,11 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
         }
 
         // ++++ -45 penalize extension
-        if last_char != None && last_char.unwrap() == penalty_lead {
+        if last_char.is_some_and(|c| c == penalty_lead) {
             scores[index1] += -45;
         }
 
-        if group_separator != None && group_separator.unwrap() == char {
+        if group_separator.is_some_and(|gs| gs == char) {
             group_alist[0][1] = group_word_count;
             group_word_count = 0;
             group_alist.insert(0, vec![index1 as i32, group_word_count]);
@@ -177,8 +164,6 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
         } else {
             last_char = Some(char as u32);
         }
-
-        index1 += 1;
     }
 
     let group_count: i32 = group_alist.len() as i32;
@@ -232,11 +217,7 @@ pub fn get_heatmap_str(scores: &mut Vec<i32>, str: &str, group_separator: Option
         cddr_group.remove(0);
         cddr_group.remove(0);
         let mut word_index: i32 = (words_length - 1) as i32;
-        let mut last_word: i32 = if last_group_limit != None {
-            last_group_limit.unwrap()
-        } else {
-            str_len as i32
-        };
+        let mut last_word: i32 = last_group_limit.unwrap_or(str_len as i32);
 
         for word in cddr_group {
             // ++++  beg word bonus AND
@@ -268,12 +249,10 @@ fn bigger_sublist(
     sorted_list: Option<&VecDeque<Option<u32>>>,
     val: Option<u32>,
 ) {
-    if sorted_list == None {
+    let Some(sl) = sorted_list else {
         return;
-    }
-    let sl: &VecDeque<Option<u32>> = sorted_list.unwrap();
-    if val != None {
-        let v: u32 = val.unwrap();
+    };
+    if let Some(v) = val {
         for sub in sl {
             if sub.unwrap() > v {
                 result.push_back(Some(sub.unwrap()));
@@ -315,27 +294,23 @@ pub fn find_best_match(
     q_index: i32,
     match_cache: &mut HashMap<u32, Vec<Result>>,
 ) {
-    let greater_num: u32 = if greater_than != None {
-        greater_than.unwrap()
-    } else {
-        0
-    };
+    let greater_num: u32 = greater_than.unwrap_or(0);
     let hash_key: u32 = q_index as u32 + (greater_num * query_length as u32);
     let hash_value: Option<&Vec<Result>> = match_cache.get(&hash_key);
 
-    if !hash_value.is_none() {
+    if let Some(hv) = hash_value {
         // Process match_cache here
         imatch.clear();
-        for val in hash_value.unwrap() {
+        for val in hv {
             imatch.push(val.clone());
         }
     } else {
-        let uchar: Option<u32> = Some(query.chars().nth(q_index as usize).unwrap() as u32);
+        let uchar: Option<u32> = query.chars().nth(q_index as usize).map(|c| c as u32);
         let sorted_list: Option<&VecDeque<Option<u32>>> = str_info.get(&uchar);
         let mut indexes: VecDeque<Option<u32>> = VecDeque::new();
         bigger_sublist(&mut indexes, sorted_list, greater_than);
         let mut temp_score: i32;
-        let mut best_score: i32 = std::f32::NEG_INFINITY as i32;
+        let mut best_score: i32 = f32::NEG_INFINITY as i32;
 
         if q_index >= query_length - 1 {
             // At the tail end of the recursion, simply generate all possible
